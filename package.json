@@ -1,0 +1,27 @@
+{
+  "name": "cli-employee-tracker-with-node-and-mysql",
+  "version": "1.0.0",
+  "description": "node.js cli using mysql as a database",
+  "main": "app.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SirPotatoIV/cli-employee-tracker-with-node-and-mysql.git"
+  },
+  "author": "Jake O'Toole",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SirPotatoIV/cli-employee-tracker-with-node-and-mysql/issues"
+  },
+  "homepage": "https://github.com/SirPotatoIV/cli-employee-tracker-with-node-and-mysql#readme",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "inquirer": "^7.0.1",
+    "mysql": "^2.17.1"
+  }
+}
