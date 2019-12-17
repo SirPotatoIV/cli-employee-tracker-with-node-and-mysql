@@ -2,6 +2,9 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql");
 const cTable = require("console.table");
+const dbMethods = require("lib/databaseMethods.js")
+
+const employeeMethods = new dbMethods("employees");
 
 // Create connection with server
 
@@ -25,7 +28,7 @@ function connectToServer(){
         if (err) throw err;
         console.log("connected as id " + connection.threadId);
         // promptUser();
-        updateData(1, 2)
+        
     });
 }
 connectToServer();
