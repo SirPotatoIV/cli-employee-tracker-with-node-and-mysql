@@ -25,11 +25,31 @@ function connectToServer(){
         if (err) throw err;
         console.log("connected as id " + connection.threadId);
         // promptUser();
-        addData("John", "Smith", "1", "2")
+        updateData(1, 2)
     });
 }
 connectToServer();
 
+// Used to update data in tables
+function updateData(employeeId, newRole){
+    // http://www.mysqltutorial.org/mysql-nodejs/update/
+    // update statment
+    let sql = `UPDATE employees
+    SET role_id = "${newRole}"
+    WHERE employee_id = ${employeeId}`;
+
+    // execute the UPDATE statement
+    connection.query(sql, (error, results, fields) => {
+    if (error){
+    return console.error(error.message);
+    }
+    console.log('Rows affected:', results.affectedRows);
+    });
+
+connection.end();
+}
+
+// Used to add data to tables
 function addData(first_name, last_name, role_id, manager_id){
     // http://www.mysqltutorial.org/mysql-nodejs/insert/
     // insert statment
@@ -49,20 +69,18 @@ function displayData(data){
 
     console.log(tableToDisplay);
 }
-// look into raw list, expand, separator for inquirer
-// --------------
-// ---------------
-// -----------------
 
+// Used to get data from tables
 function getData(table) {
     connection.query(`SELECT * FROM ${table}`, function(err, res) {
-      if (err) throw err;
-    //   console.log(res);
-      connection.end();
-      displayData(res)
+        if (err) throw err;
+        //   console.log(res);
+        connection.end();
+        displayData(res)
     });
 }
 
+// look into raw list, expand, separator for inquirer
 function promptUser(){
     const initialQuestions = [
         {

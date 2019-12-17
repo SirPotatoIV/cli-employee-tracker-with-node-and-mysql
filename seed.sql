@@ -41,10 +41,10 @@ VALUES ("Jake", "O'Toole", 1, 2), ("Kristen", "O'Toole", 2, 3), ("Penny", "O'Too
 
 -- Add a role
 INSERT INTO roles (title, salary, department_id)
-VALUES ("Peasent", 100, 1), ("Manager", 100000, 1), ("CEO", 200000, 1);
+VALUES ("Engineer", 100, 1), ("Manager", 100000, 1), ("CEO", 200000, 1);
 
 -- Add a department
 INSERT INTO departments (name)
-VALUES ("Human Resources");
+VALUES ("Research & Development"), ("Quality"), ("Human Resources");
 
 
