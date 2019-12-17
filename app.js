@@ -22,45 +22,48 @@ function contactServer(){
     connection.connect(function(err) {
         if (err) throw err;
         console.log("connected as id " + connection.threadId);
-        afterConnection();
+        promptUser();
       });
 
-      function afterConnection() {
-        connection.query("SELECT * FROM employees", function(err, res) {
-          if (err) throw err;
-          console.log(res);
-          connection.end();
-          displayData(res)
-        });
-      }
 }
 contactServer();
 
 // Used to display data from the database to the console in a table format
 function displayData(data){
-    // const testArray = [
-    //     {name: 'foo',
-    //     type: 'test'
-    // }, 
-    //     {name: 'bar',
-    //     type: 'test'
-    // },
-    //     {name: 'jake',
-    //     type: 'test'
-    // }
-    // ]
 
     const tableToDisplay = cTable.getTable(data);
 
     console.log(tableToDisplay);
 }
+// look into raw list, expand, separator for inquirer
+// --------------
+// ---------------
+// -----------------
 
-// function promptUser(){
-//     inquirer
-//         .prompt([
-//             /* Pass your questions in here */
-//         ])
-//         .then(answers => {
-//             // Use user feedback for... whatever!!
-//         });
-// }
+function getDBdata() {
+    connection.query("SELECT * FROM employees", function(err, res) {
+      if (err) throw err;
+      console.log(res);
+      connection.end();
+      displayData(res)
+    });
+}
+
+function promptUser(){
+    const initialQuestions = [
+        {
+            type: "list",
+            name: "action",
+            message: "What would you like to do?",
+            choices: ["View All Employees", "View All Employees By Department", "View All Employees by Manager", "Add Employee", "Remove Employee", "Update Employee Role", "Update Employee Manger"]
+        }
+    ]
+    inquirer
+        .prompt(
+            /* Pass your questions in here */
+            initialQuestions
+        )
+        .then(answers => {
+            console.log(answers);
+        });
+}
