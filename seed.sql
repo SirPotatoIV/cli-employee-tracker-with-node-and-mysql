@@ -21,9 +21,8 @@ CREATE TABLE employees (
 CREATE TABLE roles (
   id INT NOT NULL AUTO_INCREMENT,
   title VARCHAR(30) NULL,
-  last_name VARCHAR(30) NULL,
-  role_id INT NULL,
-  manager_id INT NULL,
+  salary DECIMAL NULL,
+  department_id INT NULL,
   PRIMARY KEY (id)
 );
 
@@ -36,4 +35,11 @@ CREATE TABLE departments (
 
 -- Using these as temp test values
 INSERT INTO employees (first_name, last_name, role_id, manager_id)
-VALUES ("Jake", "O'Toole", 1, 1), ("Kristen", "O'Toole", 2, 2), ("Penny", "O'Toole", 3, 2);
+VALUES ("Jake", "O'Toole", 1, 2), ("Kristen", "O'Toole", 2), ("Penny", "O'Toole", 3);
+
+INSERT INTO roles (title, salary, department_id)
+VALUES ("Peasent", 100, 1), ("Manager", 100000, 1), ("CEO", 200000, 1);
+
+INSERT INTO departments (name)
+VALUES ("Human Resources");
+ 
