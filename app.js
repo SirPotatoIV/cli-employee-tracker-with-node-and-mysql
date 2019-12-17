@@ -30,26 +30,27 @@ function contactServer(){
           if (err) throw err;
           console.log(res);
           connection.end();
+          displayData(res)
         });
       }
 }
 contactServer();
 
-// Used to display information to the console in a table format
-function displayInfo(){
-    const testArray = [
-        {name: 'foo',
-        type: 'test'
-    }, 
-        {name: 'bar',
-        type: 'test'
-    },
-        {name: 'jake',
-        type: 'test'
-    }
-    ]
+// Used to display data from the database to the console in a table format
+function displayData(data){
+    // const testArray = [
+    //     {name: 'foo',
+    //     type: 'test'
+    // }, 
+    //     {name: 'bar',
+    //     type: 'test'
+    // },
+    //     {name: 'jake',
+    //     type: 'test'
+    // }
+    // ]
 
-    const tableToDisplay = cTable.getTable(testArray);
+    const tableToDisplay = cTable.getTable(data);
 
     console.log(tableToDisplay);
 }
