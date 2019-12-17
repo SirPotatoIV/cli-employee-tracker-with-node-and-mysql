@@ -32,6 +32,7 @@ CREATE TABLE departments (
   name VARCHAR(30) NULL,
   PRIMARY KEY (department_id)
 );
+
 -- * Add departments, roles, employees
 -- -- Using these as temp test values
 -- -- Add empoloyees
