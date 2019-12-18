@@ -41,7 +41,7 @@ function promptUser(){
                         return ['roles'];
                 }
             }
-        }
+        },
     ]
     inquirer
         .prompt(
@@ -49,7 +49,17 @@ function promptUser(){
             initialQuestions
         )
         .then(answers => {
-            console.log(answers);
+            switch(answers.option){
+                case add: 
+                    console.log(`You choose to add to the ${answers.table} table`);
+                    break
+                case view:
+                    console.log(`You choose to view to the ${answers.table} table`);;
+                    break
+                case update:
+                    console.log(`You choose to update an employee ${answers.table}`);;
+                    break
+            }
         });
 }
 promptUser();
