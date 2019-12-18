@@ -2,10 +2,12 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql");
 const cTable = require("console.table");
-const dbMethods = require("./lib/databaseMethods")
+// const dbMethods = require("./lib/databaseMethods")
+const employeeMethods = require("./lib/employeeMethods")
 
-const employeeMethods = new dbMethods("employees");
-// console.log(employeeMethods)
+const emplMeth = new employeeMethods("Joe", "O'Grade", 1, 2);
+// console.log(emplMeth)
+
 
 // Create connection with server
 
@@ -28,7 +30,8 @@ function connectToServer(){
     connection.connect(function(err) {
         if (err) throw err;
         console.log("connected as id " + connection.threadId);
-        employeeMethods.getData(connection);
+        emplMeth.updateData(connection, "manager_id", 3, "first_name", "Jake")
+        // employeeMethods.addData(connection);
     });
 }
 connectToServer();
