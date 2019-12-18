@@ -17,7 +17,7 @@ const databaseMethods = {
 function promptUser(){
     const add = "Add departments, roles, employees";
     const view = "View departments, roles, employees";
-    const update = "Update employee roles";
+    const update = "Update employees";
     
     const initialQuestions = [
         {
@@ -26,6 +26,22 @@ function promptUser(){
             message: "What would you like to do?",
             choices: [add, view, update]
         },
+        {
+            type:"list",
+            name: "table",
+            message: "Which table/attribute would you like to Add/View/Update?",
+            choices: function(answer){
+                console.log(answer);
+                switch (answer.option){
+                    case add: 
+                        return ['employees', 'roles', 'departments'];
+                    case view:
+                        return ['employees', 'roles', 'departments'];
+                    case update:
+                        return ['roles'];
+                }
+            }
+        }
     ]
     inquirer
         .prompt(
