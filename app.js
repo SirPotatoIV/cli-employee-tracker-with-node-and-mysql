@@ -2,15 +2,45 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql");
 const cTable = require("console.table");
-// const dbMethods = require("./lib/databaseMethods")
 const employeeMethods = require("./lib/employeeMethods")
+const roleMethods = require("./lib/roleMethods")
+const departMethods = require("./lib/departmentMethods")
 
-const emplMeth = new employeeMethods("Joe", "O'Grade", 1, 2);
-// console.log(emplMeth)
+const databaseMethods = {
+    employee: employeeMethods,
+    role: roleMethods,
+    department: departMethods
+}
 
+// look into raw list, expand, separator for inquirer
+// https://www.npmjs.com/package/inquirer
+function promptUser(){
+    const add = "Add departments, roles, employees";
+    const view = "View departments, roles, employees";
+    const update = "Update employee roles";
+    
+    const initialQuestions = [
+        {
+            type: "list",
+            name: "option",
+            message: "What would you like to do?",
+            choices: [add, view, update]
+        },
+    ]
+    inquirer
+        .prompt(
+            /* Pass your questions in here */
+            initialQuestions
+        )
+        .then(answers => {
+            console.log(answers);
+        });
+}
+promptUser();
+
+// console.log(databaseMethods)
 
 // Create connection with server
-
 const connection = mysql.createConnection({
     host: "localhost",
     
@@ -25,18 +55,18 @@ const connection = mysql.createConnection({
     database: "employee_tracker_db"
 });
 
-
+// Connect to server
 function connectToServer(){
     connection.connect(function(err) {
         if (err) throw err;
         console.log("connected as id " + connection.threadId);
-        emplMeth.updateData(connection, "manager_id", 3, "first_name", "Jake")
-        // employeeMethods.addData(connection);
+        // emplMeth.updateData(connection, "manager_id", 3, "first_name", "Jake")
+        // emplMeth.addData(connection, "Jimmy", "O'Shoe", 1, 2);
     });
 }
-connectToServer();
+// connectToServer();
 
-// Used to update data in tables
+// Update data in tables
 function updateData(employeeId, newRole){
     // http://www.mysqltutorial.org/mysql-nodejs/update/
     // update statment
@@ -55,7 +85,7 @@ function updateData(employeeId, newRole){
 connection.end();
 }
 
-// Used to add data to tables
+// Add data to tables
 function addData(first_name, last_name, role_id, manager_id){
     // http://www.mysqltutorial.org/mysql-nodejs/insert/
     // insert statment
@@ -68,7 +98,7 @@ function addData(first_name, last_name, role_id, manager_id){
     connection.end();
 }
 
-// Used to display data from the database to the console in a table format
+// Display data from the database to the console in a table format
 function displayData(data){
 
     const tableToDisplay = cTable.getTable(data);
@@ -76,7 +106,7 @@ function displayData(data){
     console.log(tableToDisplay);
 }
 
-// Used to get data from tables
+// Get data from tables
 function getData(table) {
     connection.query(`SELECT * FROM ${table}`, function(err, res) {
         if (err) throw err;
@@ -86,22 +116,3 @@ function getData(table) {
     });
 }
 
-// look into raw list, expand, separator for inquirer
-function promptUser(){
-    const initialQuestions = [
-        {
-            type: "list",
-            name: "action",
-            message: "What would you like to do?",
-            choices: ["View All Employees", "View All Employees By Department", "View All Employees by Manager", "Add Employee", "Remove Employee", "Update Employee Role", "Update Employee Manger"]
-        }
-    ]
-    inquirer
-        .prompt(
-            /* Pass your questions in here */
-            initialQuestions
-        )
-        .then(answers => {
-            console.log(answers);
-        });
-}
