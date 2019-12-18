@@ -7,9 +7,9 @@ const roleMethods = require("./lib/roleMethods")
 const departMethods = require("./lib/departmentMethods")
 
 const databaseMethods = {
-    employee: employeeMethods,
-    role: roleMethods,
-    department: departMethods
+    employees: employeeMethods,
+    roles: roleMethods,
+    departments: departMethods
 }
 
 // look into raw list, expand, separator for inquirer
@@ -31,7 +31,7 @@ function promptUser(){
             name: "table",
             message: "Which table/attribute would you like to Add/View/Update?",
             choices: function(answer){
-                console.log(answer);
+                // console.log(answer);
                 switch (answer.option){
                     case add: 
                         return ['employees', 'roles', 'departments'];
@@ -51,7 +51,12 @@ function promptUser(){
         .then(answers => {
             switch(answers.option){
                 case add: 
-                    console.log(`You choose to add to the ${answers.table} table`);
+                    // console.log(databaseMethods[answers.table].addPrompts)
+                    inquirer.prompt(
+                        databaseMethods[answers.table].addPrompts
+                    ).then(answers => {
+                        console.log(answers)
+                    });
                     break
                 case view:
                     console.log(`You choose to view to the ${answers.table} table`);;
