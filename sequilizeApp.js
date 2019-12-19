@@ -16,16 +16,17 @@ const tables = {
 }
 
 async function mainPrompt(){
-    const view = "View data from a table"
-    const add = "Add data to a table"
-    const update = "Update Employee Role"
+    const view = "View data from a table";
+    const add = "Add data to a table";
+    const update = "Update Employee Role";
+    const exit = "Exit app";
     
     const userSelection =  await inquirer
         .prompt({
             type: "list",
             name: "option",
             message: "What would you like to do?",
-            choices: [view, add, update]
+            choices: [view, add, update, exit]
         });
 
     switch(userSelection.option){
@@ -38,9 +39,11 @@ async function mainPrompt(){
         case update:
             updateData()
             break
+        case exit:
+            return;
     }
 }
-mainPrompt();
+// mainPrompt();
 
 // View a table
 // -- First prompts user
@@ -65,8 +68,12 @@ async function viewData(){
 // findData()
 
 async function addData(){
-
+    const result = await Departments.create({
+        title: "Regulatory"
+    })
+    console.log(result);
 }
+addData()
 
 
 // Display data from the database to the console in a table format
@@ -74,4 +81,5 @@ function displayData(dataToDisplay){
     const formattedData = cTable.getTable(dataToDisplay);
           
     console.log(formattedData);
+    mainPrompt();
 }
