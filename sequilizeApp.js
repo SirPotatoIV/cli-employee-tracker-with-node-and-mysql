@@ -7,20 +7,26 @@ const Employees = require("./models/employees.js");
 const Roles = require("./models/roles.js");
 const Departments = require("./models/departments.js");
 
+const tables = {
+    Employees,
+    Roles,
+    Departments
+}
+
 // View a table
-function findData(){
-    Employees.findAll({ raw: true }).then(employees => {
+async function findData(table){
+   const foundData = await tables[table].findAll({ raw: true })
         // console.log("All employees:", JSON.stringify(employees, null, 4));
         // const data = JSON.stringify(employees);
-        const table = cTable.getTable(employees);
-          
-          console.log(table);
-      });
+        displayData(foundData)
+     
 }
-findData()
+findData("Employees")
 
 // Display data from the database to the console in a table format
-function displayData(data){
-
+function displayData(dataToDisplay){
+    const table = cTable.getTable(dataToDisplay);
+          
+    console.log(table);
     
 }
