@@ -55,6 +55,9 @@ function promptUser(){
                     inquirer.prompt(
                         databaseMethods[answers.table].addPrompts
                     ).then(answers => {
+                        //-------------------------
+                        // Take answers, send to correct method constructor, in method constructor write code to deconstruct the data.
+                        //------------------
                         console.log(answers)
                     });
                     break
