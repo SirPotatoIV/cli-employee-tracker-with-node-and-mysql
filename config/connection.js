@@ -15,7 +15,8 @@ const sequelize = new Sequelize("employee_tracker_db", "root", "root", {
     max: 5,
     min: 0,
     idle: 10000
-  }
+  },
+  logging: false
 });
 
 // Used for testing connection

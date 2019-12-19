@@ -2,6 +2,7 @@
 // =============================================================
 // Makes creating tables to console.log easier.
 const cTable = require("console.table");
+const inquirer = require("inquirer")
 // Models
 const Employees = require("./models/employees.js");
 const Roles = require("./models/roles.js");
@@ -14,14 +15,22 @@ const tables = {
 }
 
 // View a table
-async function findData(table){
-   const foundData = await tables[table].findAll({ raw: true })
+async function findData(){
+    const tableSelected =  await inquirer
+        .prompt({
+            type: "list",
+            name: "option",
+            message: "What would you like to view?",
+            choices: ["Employees", "Roles", "Departments"]
+        });
+    
+    const foundData = await tables[tableSelected.option].findAll({ raw: true })
         // console.log("All employees:", JSON.stringify(employees, null, 4));
         // const data = JSON.stringify(employees);
         displayData(foundData)
      
 }
-findData("Employees")
+findData()
 
 // Display data from the database to the console in a table format
 function displayData(dataToDisplay){
