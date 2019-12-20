@@ -9,7 +9,7 @@ const sequelize = require("./config/connection")
 const Employees = require("./models/employees.js");
 const Roles = require("./models/roles.js");
 const Departments = require("./models/departments.js");
-// Object used to reference the models with strings.
+// Object used to reference the models with strings, which correspond to each table in the database
 const tables = {
     Employees,
     Roles,
@@ -21,7 +21,7 @@ const tables = {
 // -- user is prompted for what they would like to do
 // -- user request is used to call the corresponding function
 async function mainPrompt(){
-    // Updates the database since the connection will not stop after a user completes an update or add to the table.
+    // Updates the database since the connection will not stop after a user completes an update or add to the table
     await sequelize.sync()
     //Used to display one table of all data at the beginning
     const joinedData = await sequelize.query(`SELECT employees.id, employees.first_name, employees.last_name, employees.manager_id, employees.role_id, roles.title AS role_title, roles.salary, departments.title AS department_title FROM employees, roles, departments WHERE roles.id = employees.role_id AND roles.department_id = departments.id ORDER BY employees.id`, {type: sequelize.QueryTypes.SELECT})
