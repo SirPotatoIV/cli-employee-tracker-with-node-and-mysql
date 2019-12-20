@@ -1,26 +1,40 @@
 // Dependencies
-// =============================================================
-// Makes creating tables to console.log easier.
+// -- Makes creating tables to console.log easier
 const cTable = require("console.table");
+// -- Used to prompt the user
 const inquirer = require("inquirer")
-// Models
+// -- Used to sync the database in this js file
+const sequelize = require("./config/connection")
+// -- Models 
 const Employees = require("./models/employees.js");
 const Roles = require("./models/roles.js");
 const Departments = require("./models/departments.js");
-
-// object used to reference the models with strings.
+// Object used to reference the models with strings.
 const tables = {
     Employees,
     Roles,
     Departments
 }
 
+// First function called to start the entire app
+// -- full database displayed in the conosole
+// -- user is prompted for what they would like to do
+// -- user request is used to call the corresponding function
 async function mainPrompt(){
+    // Updates the database since the connection will not stop after a user completes an update or add to the table.
+    await sequelize.sync()
+    //Used to display one table of all data at the beginning
+    const joinedData = await sequelize.query(`SELECT employees.id, employees.first_name, employees.last_name, employees.manager_id, employees.role_id, roles.title AS role_title, roles.salary, departments.title AS department_title FROM employees, roles, departments WHERE roles.id = employees.role_id AND roles.department_id = departments.id ORDER BY employees.id`, {type: sequelize.QueryTypes.SELECT})
+    const joinedDataTable = cTable.getTable(joinedData)
+    console.log(joinedDataTable)
+
+    // Questions for main prompt stated as variables for ease of reading and reduction of error.
     const view = "View data from a table";
     const add = "Add data to a table";
     const update = "Update Employee Role";
     const exit = "Exit app";
     
+    // Prompting user to figure out what they want to do.
     const userSelection =  await inquirer
         .prompt({
             type: "list",
@@ -29,6 +43,7 @@ async function mainPrompt(){
             choices: [view, add, update, exit]
         });
 
+    // Based on user answer, the switch calls the respective function. Each function contains additional prompts.
     switch(userSelection.option){
         case view: 
             viewTable()
@@ -157,20 +172,24 @@ async function addData(){
 }
 
 // Update employee role
+// -- Get list of employees
+// -- Prompt user to find out which employee they would like to update the role of
+// -- Prompt the user what the new role_id should be.
+// -- Update the user's role_id
 async function updateData(){
     
     // Get list of employees
     const usersList = await Employees.findAll(
         {   
-            attributes: ["employee_id", "first_name", "last_name"],
+            attributes: ["id", "first_name", "last_name"],
             raw: true
         })
     
     const usersListString = [];
     
     for(let i = 0; i < usersList.length; i++){
-        const {employee_id, first_name, last_name} = usersList[i];
-        const employeeInfo = `${employee_id} ${first_name} ${last_name}`;
+        const {id, first_name, last_name} = usersList[i];
+        const employeeInfo = `${id} ${first_name} ${last_name}`;
         usersListString.push(employeeInfo)
     }
 
@@ -196,7 +215,7 @@ async function updateData(){
             role_id: newRole.role_id,
         }, 
         {
-            where: {employee_id : usersList[indexOfSelected].employee_id}
+            where: {id : usersList[indexOfSelected].id}
         });
       console.log(`${employeeToUpdate.selected} role updated!`)
       mainPrompt()

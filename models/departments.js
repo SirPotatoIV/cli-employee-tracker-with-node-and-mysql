@@ -8,7 +8,7 @@ const sequelize = require("../config/connection.js");
 
 // Creates an "Employees" model that matches up with DB
 const Departments = sequelize.define("departments", {
-        departments_id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
+        id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
         title: { type:Sequelize.STRING,  allowNull: false },
     },
     {
