@@ -31,7 +31,7 @@ async function mainPrompt(){
 
     switch(userSelection.option){
         case view: 
-            viewData()
+            viewTable()
             break
         case add:
             addData()
@@ -50,21 +50,29 @@ mainPrompt();
 // -- Query the database for the requested table
 // -- Display the requested table using the displayData function
 // -- Call main prompt to cause recursion 
-async function viewData(){
+async function viewTable(table){
+   let tableSelected = "";
+   // If another functions is trying to view a table 
+    if(table){
+        tableSelected = table;
+    }
     // Asks user what table they want to view.
-    const tableSelected =  await inquirer
+   else { answer =  await inquirer
         .prompt({
             type: "list",
-            name: "option",
+            name: "tableSelected",
             message: "What would you like to view?",
             choices: ["Employees", "Roles", "Departments"]
         });
+
+        tableSelected = answer.tableSelected;
+        
+    }
+        
     
-    const foundData = await tables[tableSelected.option].findAll({ raw: true })
-        // console.log("All employees:", JSON.stringify(employees, null, 4));
-        // const data = JSON.stringify(employees);
-        displayData(foundData)
-     
+    const foundData = await tables[tableSelected].findAll({ raw: true })
+    // Calls function that uses cTable.
+    displayData(foundData)
 }
 
 // Add data to a table
@@ -150,13 +158,55 @@ async function addData(){
 
 // Update employee role
 async function updateData(){
+    
+    // Get list of employees
+    const usersList = await Employees.findAll(
+        {   
+            attributes: ["employee_id", "first_name", "last_name"],
+            raw: true
+        })
+    
+    const usersListString = [];
+    
+    for(let i = 0; i < usersList.length; i++){
+        const {employee_id, first_name, last_name} = usersList[i];
+        const employeeInfo = `${employee_id} ${first_name} ${last_name}`;
+        usersListString.push(employeeInfo)
+    }
 
+    // Ask user what employee they would like to update
+    const employeeToUpdate = await inquirer
+        .prompt({
+            type: "list",
+            name: "selected",
+            message: "Please select the employee who you want to update.",
+            choices: usersListString
+        })
+    const indexOfSelected = usersListString.indexOf(employeeToUpdate.selected)
+    // Ask user for new value of attribute they would like to change
+    const newRole = await inquirer
+        .prompt({
+            type: "input",
+            name: "role_id",
+            message: `What is ${employeeToUpdate.selected}'s new role id?`
+        })
+    
+    Employees.update(
+        {
+            role_id: newRole.role_id,
+        }, 
+        {
+            where: {employee_id : usersList[indexOfSelected].employee_id}
+        });
+      console.log(`${employeeToUpdate.selected} role updated!`)
+      mainPrompt()
 
 }
 
 // Display data from the database to the console in a table format
 function displayData(dataToDisplay){
+    
     const formattedData = cTable.getTable(dataToDisplay);
-
+    console.log(formattedData);
     mainPrompt();
 }
